@@ -1,0 +1,89 @@
+{
+  "categories": [
+    {
+      "name": "Promotions",
+      "description": "Marketing, sales, discounts, offers.",
+      "clean_action": "trash",
+      "clean_older_than_days": 90,
+      "rules": [
+        { "weight": 2, "subject_keywords": ["sale", "% off", "discount", "deal", "offer", "coupon", "promo", "save", "limited time", "black friday", "cyber monday"] },
+        { "weight": 2, "from_contains": ["noreply", "no-reply", "marketing", "deals", "offers", "newsletter@"] },
+        { "weight": 1, "has_list_unsubscribe": true },
+        { "weight": 1, "gmail_labels": ["CATEGORY_PROMOTIONS"] }
+      ]
+    },
+    {
+      "name": "Social",
+      "description": "Social networks and community notifications.",
+      "clean_action": "archive",
+      "clean_older_than_days": 60,
+      "rules": [
+        { "weight": 3, "from_domains": ["facebookmail.com", "linkedin.com", "twitter.com", "x.com", "instagram.com", "tiktok.com", "reddit.com", "pinterest.com"] },
+        { "weight": 2, "subject_keywords": ["tagged you", "new connection", "wants to connect", "liked your", "commented on", "mentioned you", "new follower"] },
+        { "weight": 1, "gmail_labels": ["CATEGORY_SOCIAL"] }
+      ]
+    },
+    {
+      "name": "Finance",
+      "description": "Banking, invoices, payments, statements.",
+      "clean_action": "none",
+      "clean_older_than_days": 0,
+      "rules": [
+        { "weight": 3, "subject_keywords": ["invoice", "receipt", "payment", "statement", "transaction", "balance", "refund", "billing"] },
+        { "weight": 2, "from_contains": ["bank", "paypal", "stripe", "billing", "accounts", "wise", "revolut"] }
+      ]
+    },
+    {
+      "name": "Travel",
+      "description": "Bookings, itineraries, boarding passes.",
+      "clean_action": "none",
+      "clean_older_than_days": 0,
+      "rules": [
+        { "weight": 3, "subject_keywords": ["itinerary", "booking", "reservation", "boarding pass", "flight", "check-in", "hotel confirmation", "e-ticket"] },
+        { "weight": 2, "from_contains": ["booking.com", "airbnb", "expedia", "agoda", "airlines", "trip.com"] }
+      ]
+    },
+    {
+      "name": "Updates",
+      "description": "Automated app/service notifications and alerts.",
+      "clean_action": "mark_read",
+      "clean_older_than_days": 30,
+      "rules": [
+        { "weight": 2, "subject_keywords": ["notification", "alert", "verify", "confirm your", "password", "security", "your account", "sign-in", "otp"] },
+        { "weight": 2, "from_contains": ["notifications@", "alerts@", "updates@", "no-reply", "noreply"] },
+        { "weight": 1, "gmail_labels": ["CATEGORY_UPDATES"] }
+      ]
+    },
+    {
+      "name": "Newsletters",
+      "description": "Subscriptions and digests you opted into.",
+      "clean_action": "archive",
+      "clean_older_than_days": 45,
+      "rules": [
+        { "weight": 2, "subject_keywords": ["newsletter", "digest", "weekly", "this week", "roundup", "edition", "bulletin"] },
+        { "weight": 2, "from_contains": ["substack.com", "medium.com", "newsletter", "digest@"] },
+        { "weight": 1, "has_list_unsubscribe": true }
+      ]
+    },
+    {
+      "name": "Work",
+      "description": "Calendar, documents, team and dev tooling.",
+      "clean_action": "none",
+      "clean_older_than_days": 0,
+      "rules": [
+        { "weight": 3, "from_domains": ["github.com", "gitlab.com", "atlassian.net", "slack.com", "notion.so", "asana.com"] },
+        { "weight": 2, "subject_keywords": ["meeting", "calendar", "invite", "agenda", "merge request", "pull request", "pipeline", "deploy", "ticket"] }
+      ]
+    },
+    {
+      "name": "Spam-suspect",
+      "description": "Likely junk / phishing — review before trashing.",
+      "clean_action": "none",
+      "clean_older_than_days": 0,
+      "rules": [
+        { "weight": 3, "subject_keywords": ["you won", "winner", "congratulations you", "claim your prize", "viagra", "crypto giveaway", "act now", "wire transfer", "inheritance", "nigerian prince"] },
+        { "weight": 2, "gmail_labels": ["SPAM"] }
+      ]
+    }
+  ]
+}

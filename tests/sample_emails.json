@@ -1,0 +1,85 @@
+[
+  {
+    "id": "1",
+    "from": "deals@shopmart.com",
+    "subject": "🔥 48-hour SALE — 50% off everything, limited time!",
+    "snippet": "Don't miss our biggest discount of the year. Use promo code SAVE50.",
+    "list_unsubscribe": "<mailto:unsub@shopmart.com>",
+    "labels": ["CATEGORY_PROMOTIONS"],
+    "internal_date": "1748736000000"
+  },
+  {
+    "id": "2",
+    "from": "notifications@linkedin.com",
+    "subject": "Jane Doe wants to connect with you",
+    "snippet": "You have a new connection request.",
+    "labels": ["CATEGORY_SOCIAL"],
+    "internal_date": "1748736000000"
+  },
+  {
+    "id": "3",
+    "from": "statements@mybank.com",
+    "subject": "Your June account statement is ready",
+    "snippet": "Your monthly statement and balance summary are available.",
+    "labels": ["INBOX"],
+    "internal_date": "1781913600000"
+  },
+  {
+    "id": "4",
+    "from": "no-reply@booking.com",
+    "subject": "Your hotel reservation confirmation — Tokyo",
+    "snippet": "Booking confirmed. Here is your itinerary and check-in details.",
+    "labels": ["INBOX"],
+    "internal_date": "1781913600000"
+  },
+  {
+    "id": "5",
+    "from": "alerts@cloudapp.com",
+    "subject": "Security alert: new sign-in to your account",
+    "snippet": "We noticed a new sign-in. Verify it was you.",
+    "labels": ["CATEGORY_UPDATES", "UNREAD"],
+    "internal_date": "1748736000000"
+  },
+  {
+    "id": "6",
+    "from": "hello@substack.com",
+    "subject": "The Weekly Digest — this week's top reads",
+    "snippet": "Your weekly roundup of articles.",
+    "list_unsubscribe": "<mailto:unsub@substack.com>",
+    "labels": ["INBOX"],
+    "internal_date": "1748736000000"
+  },
+  {
+    "id": "7",
+    "from": "notifications@github.com",
+    "subject": "[Mavrone81/EmailClassifier] Pull request opened",
+    "snippet": "A new pull request was opened in your repository.",
+    "labels": ["INBOX"],
+    "internal_date": "1781913600000"
+  },
+  {
+    "id": "8",
+    "from": "winner@lucky-draw-intl.biz",
+    "subject": "CONGRATULATIONS YOU WON! Claim your prize now",
+    "snippet": "You have been selected. Send your details to claim your inheritance.",
+    "labels": ["SPAM"],
+    "internal_date": "1748736000000"
+  },
+  {
+    "id": "9",
+    "from": "marketing@gadgetworld.com",
+    "subject": "New arrivals just for you — save 20% today",
+    "snippet": "Fresh deals on the latest gadgets.",
+    "list_unsubscribe": "<mailto:stop@gadgetworld.com>",
+    "labels": ["CATEGORY_PROMOTIONS"],
+    "internal_date": "1781913600000"
+  },
+  {
+    "id": "10",
+    "from": "mum@gmail.com",
+    "subject": "Dinner on Sunday?",
+    "snippet": "Are you free this weekend? Let me know.",
+    "labels": ["INBOX"],
+    "internal_date": "1781913600000"
+  }
+]

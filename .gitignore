@@ -1,0 +1,20 @@
+# Secrets — never commit OAuth client or tokens
+credentials.json
+token.json
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
