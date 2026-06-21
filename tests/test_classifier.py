@@ -8,7 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from email_classifier import Classifier, Cleaner, load_categories  # noqa: E402
+from email_classifier import Category, Classifier, Cleaner, Rule, load_categories  # noqa: E402
 
 CATS = load_categories()
 EMAILS = json.loads((Path(__file__).parent / "sample_emails.json").read_text(encoding="utf-8"))
@@ -43,16 +43,21 @@ def test_personal_is_uncategorised():
 
 
 def test_cleaner_respects_age_threshold():
-    # "now" fixed so the test is deterministic regardless of when it runs.
+    # Self-contained policy so the test is independent of the shipped config:
+    # Promotions trashes once older than 90 days.
+    cats = [Category(
+        name="Promotions",
+        clean_action="trash",
+        clean_older_than_days=90,
+        rules=[Rule(weight=4, subject_keywords=["sale", "% off", "save", "discount"])],
+    )]
     now = datetime(2026, 6, 21, tzinfo=timezone.utc)
-    results = _classify()
-    plan = Cleaner(CATS).plan(EMAILS, results, now=now)
+    results = Classifier(cats).classify(EMAILS)
+    plan = Cleaner(cats).plan(EMAILS, results, now=now)
     acted_ids = {a.email_id for a in plan.actions}
     # Old promo (#1, ~385d) trashed; recent promo (#9, ~1d) below 90d threshold -> skipped.
     assert "1" in acted_ids
     assert "9" not in acted_ids
-    # Finance/Work/Travel have clean_action "none" -> never acted on.
-    assert "3" not in acted_ids and "7" not in acted_ids and "4" not in acted_ids
 
 
 def test_spam_pushed_to_junk():

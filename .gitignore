@@ -1,6 +1,8 @@
 # Secrets — never commit OAuth client or tokens
 credentials.json
 token.json
+client_secret*.json
+*.apps.googleusercontent.com.json
 *.pem
 
 # Python

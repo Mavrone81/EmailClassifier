@@ -99,6 +99,46 @@ def cmd_clean(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_sort(args: argparse.Namespace) -> int:
+    """Apply category labels to live Gmail messages, and sieve junk to Spam."""
+    categories = load_categories(args.config)
+    spam_cats = {c.name for c in categories if c.clean_action == "spam"}
+    client, emails = _live(args)
+    classifier = Classifier(categories)
+    results = classifier.classify(emails)
+    _print_summary(classifier.summarise(results), len(results))
+
+    dry_run = not args.apply
+    labelled: dict[str, int] = {}
+    junked = 0
+    skipped = 0
+    prefix = args.label_prefix or ""
+
+    for r in results:
+        if r.category == "Uncategorised":
+            skipped += 1
+            continue
+        if r.category in spam_cats:
+            if not dry_run:
+                client.mark_spam(r.email_id)
+            junked += 1
+            continue
+        label_name = f"{prefix}{r.category}"
+        if not dry_run:
+            client.apply_label(r.email_id, label_name)
+        labelled[label_name] = labelled.get(label_name, 0) + 1
+
+    mode = "APPLIED" if not dry_run else "DRY-RUN (nothing changed)"
+    print(f"  Sort — {mode}\n")
+    for name, n in sorted(labelled.items(), key=lambda kv: -kv[1]):
+        print(f"    label {name:<22} -> {n}")
+    print(f"    moved to Junk (Spam)    -> {junked}")
+    print(f"    left untouched (Uncat.) -> {skipped}\n")
+    if dry_run:
+        print("  Re-run with --apply to perform the sort.\n")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="email_classifier", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -126,6 +166,13 @@ def build_parser() -> argparse.ArgumentParser:
     cl.add_argument("--action", choices=["archive", "trash", "mark_read", "spam"], help="force an action")
     cl.add_argument("--older-than", type=int, dest="older_than", help="age threshold in days")
     cl.set_defaults(func=cmd_clean)
+
+    s = sub.add_parser("sort", help="apply category labels to live Gmail + sieve junk to Spam")
+    add_live(s)
+    s.add_argument("--apply", action="store_true", help="actually label/sieve (default: dry-run)")
+    s.add_argument("--label-prefix", default="", dest="label_prefix",
+                   help="optional prefix for created labels, e.g. 'Sorted/'")
+    s.set_defaults(func=cmd_sort)
     return p
 
 
