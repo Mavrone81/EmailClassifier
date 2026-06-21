@@ -58,7 +58,7 @@ Useful `clean` flags:
 |------|--------|
 | `--apply` | Actually perform the actions (otherwise dry-run) |
 | `--category Promotions` | Only act on one category |
-| `--action archive` | Force an action, overriding category policy |
+| `--action archive` | Force an action (`archive`/`trash`/`mark_read`/`spam`), overriding category policy |
 | `--older-than 120` | Override the age threshold (days) |
 
 > `credentials.json` and `token.json` are git-ignored — keep them private.
@@ -77,8 +77,19 @@ Per-category cleaning policy fields:
 ```jsonc
 {
   "name": "Promotions",
-  "clean_action": "trash",          // none | archive | trash | mark_read
+  "clean_action": "trash",          // none | archive | trash | mark_read | spam
   "clean_older_than_days": 90        // only act once a message is this old
+}
+```
+
+The **Spam-suspect** category uses `clean_action: "spam"`, which moves likely
+junk/phishing to Gmail's **Spam (Junk)** folder (reversible via "Not spam"):
+
+```jsonc
+{
+  "name": "Spam-suspect",
+  "clean_action": "spam",
+  "clean_older_than_days": 0          // act immediately, no age gate
 }
 ```
 

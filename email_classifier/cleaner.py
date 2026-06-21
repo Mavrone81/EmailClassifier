@@ -16,7 +16,7 @@ from typing import Any
 from .categories import Category
 from .classifier import Classification
 
-VALID_ACTIONS = {"none", "archive", "trash", "mark_read"}
+VALID_ACTIONS = {"none", "archive", "trash", "mark_read", "spam"}
 
 
 @dataclass
@@ -121,9 +121,12 @@ class Cleaner:
         that *would* be applied. The gmail_client must expose: archive(id),
         trash(id), mark_read(id).
         """
-        applied = {"archive": 0, "trash": 0, "mark_read": 0}
+        # Map plan action -> Gmail client method name.
+        method = {"archive": "archive", "trash": "trash",
+                  "mark_read": "mark_read", "spam": "mark_spam"}
+        applied = {"archive": 0, "trash": 0, "mark_read": 0, "spam": 0}
         for a in plan.actions:
             if not dry_run:
-                getattr(gmail_client, a.action)(a.email_id)
+                getattr(gmail_client, method[a.action])(a.email_id)
             applied[a.action] += 1
         return applied

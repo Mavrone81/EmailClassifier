@@ -55,6 +55,15 @@ def test_cleaner_respects_age_threshold():
     assert "3" not in acted_ids and "7" not in acted_ids and "4" not in acted_ids
 
 
+def test_spam_pushed_to_junk():
+    now = datetime(2026, 6, 21, tzinfo=timezone.utc)
+    results = _classify()
+    plan = Cleaner(CATS).plan(EMAILS, results, now=now)
+    spam_actions = {a.email_id: a.action for a in plan.actions if a.action == "spam"}
+    # The phishing/"you won" email (#8) must be sent to Junk regardless of age.
+    assert spam_actions.get("8") == "spam"
+
+
 def test_execute_dry_run_changes_nothing():
     results = _classify()
     plan = Cleaner(CATS).plan(EMAILS, results, now=datetime(2026, 6, 21, tzinfo=timezone.utc))

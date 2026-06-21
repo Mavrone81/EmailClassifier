@@ -100,6 +100,14 @@ class GmailClient:
         # Moves to Trash (recoverable ~30 days), not a permanent delete.
         self.service.users().messages().trash(userId="me", id=message_id).execute()
 
+    def mark_spam(self, message_id: str) -> None:
+        # Moves the message to Gmail's Spam/Junk folder (adds SPAM, leaves INBOX).
+        # Reversible: the user can "Not spam" it back from the Spam folder.
+        self.service.users().messages().modify(
+            userId="me", id=message_id,
+            body={"addLabelIds": ["SPAM"], "removeLabelIds": ["INBOX"]},
+        ).execute()
+
     def mark_read(self, message_id: str) -> None:
         self.service.users().messages().modify(
             userId="me", id=message_id, body={"removeLabelIds": ["UNREAD"]}

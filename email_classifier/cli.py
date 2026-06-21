@@ -123,7 +123,7 @@ def build_parser() -> argparse.ArgumentParser:
     add_live(cl)
     cl.add_argument("--apply", action="store_true", help="actually perform actions (default: dry-run)")
     cl.add_argument("--category", help="only act on this category")
-    cl.add_argument("--action", choices=["archive", "trash", "mark_read"], help="force an action")
+    cl.add_argument("--action", choices=["archive", "trash", "mark_read", "spam"], help="force an action")
     cl.add_argument("--older-than", type=int, dest="older_than", help="age threshold in days")
     cl.set_defaults(func=cmd_clean)
     return p
