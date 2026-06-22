@@ -118,6 +118,25 @@ class GmailClient:
             userId="me", id=message_id, body={"addLabelIds": [self._label_id(label)]}
         ).execute()
 
+    def set_category(self, message_id: str, keep: str, managed_labels: list[str]) -> None:
+        """Apply exactly one category label: add `keep`, remove any other managed
+        category labels the message currently carries (one API call). Leaves the
+        user's own non-managed labels untouched."""
+        keep_id = self._label_id(keep)               # create if needed
+        remove_ids = [
+            lid for n in managed_labels if n != keep
+            for lid in (self._existing_label_id(n),) if lid
+        ]
+        body: dict[str, Any] = {"addLabelIds": [keep_id]}
+        if remove_ids:
+            body["removeLabelIds"] = remove_ids
+        self.service.users().messages().modify(userId="me", id=message_id, body=body).execute()
+
+    def _existing_label_id(self, name: str) -> str | None:
+        if not self._label_cache:
+            self._label_id(name)  # populates the cache (and creates `name` if missing)
+        return self._label_cache.get(name)
+
     def _label_id(self, name: str) -> str:
         if not self._label_cache:
             resp = self.service.users().labels().list(userId="me").execute()

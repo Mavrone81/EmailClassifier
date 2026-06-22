@@ -109,12 +109,15 @@ def cmd_sort(args: argparse.Namespace) -> int:
     _print_summary(classifier.summarise(results), len(results))
 
     dry_run = not args.apply
+    prefix = args.label_prefix or ""
+    # The exclusive set of primary topic labels this tool manages (one per message).
+    managed = [f"{prefix}{c.name}" for c in categories if not c.overlay and c.clean_action != "spam"]
     labelled: dict[str, int] = {}
+    overlaid: dict[str, int] = {}
     junked = 0
     skipped = 0
-    prefix = args.label_prefix or ""
 
-    for r in results:
+    for r, email in zip(results, emails):
         if r.category == "Uncategorised":
             skipped += 1
             continue
@@ -125,13 +128,21 @@ def cmd_sort(args: argparse.Namespace) -> int:
             continue
         label_name = f"{prefix}{r.category}"
         if not dry_run:
-            client.apply_label(r.email_id, label_name)
+            client.set_category(r.email_id, label_name, managed)   # exclusive
         labelled[label_name] = labelled.get(label_name, 0) + 1
+        # additive overlays (e.g. "Must read")
+        for ov in classifier.overlay_labels(email):
+            ov_name = f"{prefix}{ov}"
+            if not dry_run:
+                client.apply_label(r.email_id, ov_name)
+            overlaid[ov_name] = overlaid.get(ov_name, 0) + 1
 
     mode = "APPLIED" if not dry_run else "DRY-RUN (nothing changed)"
     print(f"  Sort — {mode}\n")
     for name, n in sorted(labelled.items(), key=lambda kv: -kv[1]):
         print(f"    label {name:<22} -> {n}")
+    for name, n in sorted(overlaid.items(), key=lambda kv: -kv[1]):
+        print(f"    overlay {name:<20} -> {n}")
     print(f"    moved to Junk (Spam)    -> {junked}")
     print(f"    left untouched (Uncat.) -> {skipped}\n")
     if dry_run:

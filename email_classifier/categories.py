@@ -75,8 +75,11 @@ class Category:
     description: str = ""
     rules: list[Rule] = field(default_factory=list)
     # Default cleaning policy for this category (consumed by cleaner.py).
-    clean_action: str = "none"   # none | archive | trash | mark_read
+    clean_action: str = "none"   # none | archive | trash | mark_read | spam
     clean_older_than_days: int = 0
+    # Overlay categories are additive priority flags (e.g. "Must read"): they are
+    # applied ON TOP of a message's single primary topic label, never instead of it.
+    overlay: bool = False
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Category":
@@ -87,6 +90,7 @@ class Category:
             rules=rules,
             clean_action=data.get("clean_action", "none"),
             clean_older_than_days=int(data.get("clean_older_than_days", 0)),
+            overlay=bool(data.get("overlay", False)),
         )
 
     def score(self, email: dict[str, Any]) -> float:

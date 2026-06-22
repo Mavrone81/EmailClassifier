@@ -37,9 +37,22 @@ def test_work_and_spam():
     assert by_id["8"].category == "Spam-suspect"
 
 
-def test_personal_is_uncategorised():
+def test_personal_detected():
+    # mum@gmail.com / "Dinner on Sunday?" — now caught by the Personal category.
     by_id = {c.email_id: c for c in _classify()}
-    assert by_id["10"].category == "Uncategorised"
+    assert by_id["10"].category == "Personal"
+
+
+def test_security_and_overlay():
+    by_id = {c.email_id: c for c in _classify()}
+    # "Security alert: new sign-in" -> Security category
+    assert by_id["5"].category == "Security"
+    # overlay check: classifier exposes overlay labels separately from the primary
+    from email_classifier import Classifier as _C  # noqa
+    clf = Classifier(CATS)
+    urgent = {"id": "x", "from": "a@b.com", "subject": "ACTION REQUIRED: respond by deadline"}
+    assert "Must read" in clf.overlay_labels(urgent)
+    assert clf.classify_one(urgent).category != "Must read"  # overlay never the primary
 
 
 def test_cleaner_respects_age_threshold():

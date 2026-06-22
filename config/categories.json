@@ -7,106 +7,186 @@
       "clean_older_than_days": 0,
       "rules": [
         { "weight": 6, "gmail_labels": ["SPAM"] },
-        { "weight": 6, "subject_keywords": ["you won", "you have won", "winner", "congratulations you", "claim your prize", "claim your reward", "you have been selected", "free gift card", "viagra", "cialis", "crypto giveaway", "double your bitcoin", "urgent action required", "wire transfer", "unclaimed funds", "nigerian prince", "verify your account immediately", "account suspended", "confirm your password", "tax refund pending", "you are a lucky"] },
-        { "weight": 4, "body_keywords": ["send your bank details", "wire the amount", "western union", "beneficiary", "this is not a scam", "100% free", "risk-free investment"] },
+        { "weight": 6, "subject_keywords": ["you won", "you have won", "winner", "congratulations you", "claim your prize", "claim your reward", "you have been selected", "free gift card", "viagra", "cialis", "crypto giveaway", "double your bitcoin", "wire transfer", "unclaimed funds", "nigerian prince", "verify your account immediately", "tax refund pending", "you are a lucky"] },
         { "weight": 4, "from_contains": ["lucky-draw", "prize-", "winner@", "rewards-", "giveaway", ".top", ".xyz"] }
+      ]
+    },
+    {
+      "name": "Security",
+      "description": "Sign-in alerts, OTP, password resets, 2FA, account verification.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 6, "subject_keywords": ["security alert", "new sign-in", "new login", "sign-in attempt", "login attempt", "unusual activity", "suspicious", "verify your", "verification code", "one-time password", "one time password", "otp", "2fa", "two-factor", "reset your password", "password was", "password changed", "confirm your email", "was this you"] },
+        { "weight": 3, "body_keywords": ["verification code", "one-time", "we noticed a new sign-in", "verify it was you"] }
+      ]
+    },
+    {
+      "name": "Government",
+      "description": "Singapore government & statutory bodies.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 6, "from_domains": ["hdb.gov.sg", "singpass.gov.sg", "iras.gov.sg", "cpf.gov.sg", "mom.gov.sg", "ica.gov.sg", "lta.gov.sg", "mindef.gov.sg", "moh.gov.sg", "onepass.gov.sg"] },
+        { "weight": 5, "from_contains": [".gov.sg", "singpass", "@mindef", "@ns.sg", "nsportal"] },
+        { "weight": 3, "subject_keywords": ["hdb", "singpass", "cpf", "iras", "mindef", "ns ", "reservist", "ippt", "statutory"] }
+      ]
+    },
+    {
+      "name": "DNS",
+      "description": "Domain & DNS — registrars, renewals, nameserver/zone notices.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 6, "from_contains": ["sgnic", "donotreply@sgnic", "namecheap", "godaddy", "cloudflare", "@registrar", "domains@", "noc@", "@exabytes"] },
+        { "weight": 5, "subject_keywords": ["domain name", "domain expiry", "domain renewal", "renew your domain", "nameserver", "dns record", "dns zone", ".sg domain", "ssl certificate", "whois", "registrar"] }
       ]
     },
     {
       "name": "Finance",
       "description": "Banking, payments, transactions, statements.",
       "clean_action": "none",
-      "clean_older_than_days": 0,
       "rules": [
-        { "weight": 5, "from_contains": ["ibanking.alert", "digibank", "@dbs.com", "paypal", "stripe", "@ocbc", "@posb", "billing@", "@uob"] },
-        { "weight": 4, "subject_keywords": ["invoice", "receipt", "payment", "statement", "transaction", "balance", "refund", "paynow", "nets", "digibank", "payment failed", "your bill"] },
-        { "weight": 3, "body_keywords": ["paynow", "nets scan", "transaction was completed", "transaction ref", "we refer to your", "you've received a transfer", "payment for subscription", "we weren't able to charge"] }
+        { "weight": 5, "from_contains": ["ibanking.alert", "digibank", "@dbs.com", "paypal", "stripe", "@ocbc", "@posb", "@uob", "@gxs", "wise.com", "revolut"] },
+        { "weight": 4, "subject_keywords": ["invoice", "receipt", "payment received", "statement", "transaction", "balance", "refund", "paynow", "nets", "digibank", "payment failed", "card ending"] },
+        { "weight": 3, "body_keywords": ["paynow", "nets scan", "transaction was completed", "transaction ref", "you've received a transfer", "we weren't able to charge"] }
+      ]
+    },
+    {
+      "name": "Bills & Utilities",
+      "description": "Telco, hosting, utilities — recurring bills & service notices.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 5, "from_contains": ["singtel", "@m1.com", "starhub", "spgroup", "sp services", "geneco", "billing@exabytes", "@simba"] },
+        { "weight": 4, "subject_keywords": ["your bill", "bill is ready", "amount due", "payment due", "auto-payment", "utility", "data usage", "broadband", "mobile bill", "subscription renewal"] }
+      ]
+    },
+    {
+      "name": "Health & Insurance",
+      "description": "Insurers, clinics, medical & policy matters.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 6, "from_contains": ["@aia", "prudential", "greateastern", "great eastern", "ntucincome", "income.com.sg", "manulife", "healthhub", "@clinic", "polyclinic", "raffles medical", "parkway"] },
+        { "weight": 4, "subject_keywords": ["policy", "premium", "insurance", "coverage", "medical appointment", "health screening", "claim approved", "policy renewal", "medisave", "medishield"] }
+      ]
+    },
+    {
+      "name": "Employment",
+      "description": "HR & employment matters — payslips, contracts, leave, CPF as employee.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 5, "from_contains": ["hr@", "payroll@", "people@", "talent@", "@workday", "@bamboohr"] },
+        { "weight": 4, "subject_keywords": ["payslip", "salary", "contract", "offer letter", "onboarding", "leave approved", "leave application", "appraisal", "performance review", "employment", "work pass", "cpf contribution", "timesheet"] }
       ]
     },
     {
       "name": "Jobs",
-      "description": "Job alerts, recruiter messages, hiring & career listings.",
+      "description": "Job alerts, recruiter outreach & external hiring listings.",
       "clean_action": "none",
-      "clean_older_than_days": 0,
       "rules": [
         { "weight": 6, "from_contains": ["jobalerts", "jobs-noreply", "jobs-listings", "@e.jobstreet.com", "jobpostings"] },
         { "weight": 6, "from_domains": ["jobstreet.com", "indeed.com", "mycareersfuture.gov.sg", "glints.com", "efinancialcareers.com"] },
-        { "weight": 4, "subject_keywords": ["job alert", "view jobs", "job recommendations", "jobs for you", "we're hiring", "is hiring", "is also hiring", "new role", "see your opportunities", "head of", "engineer:", "manager:", "salary"] },
-        { "weight": 3, "body_keywords": ["job recommendations", "view jobs", "roles could be a match", "we're hiring", "is hiring", "apply now", "view job", "matched your search profile", "see your opportunities"] }
+        { "weight": 3, "subject_keywords": ["job alert", "view jobs", "job recommendations", "jobs for you", "we're hiring", "is hiring", "is also hiring", "see your opportunities", "engineer:", "manager:"] }
+      ]
+    },
+    {
+      "name": "Education",
+      "description": "Courses, e-learning, school & training.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 6, "from_contains": ["canvas", "@sim.edu", "coursera", "@edx", "udemy", "emeritus", "@nus.edu", "@ntu.edu", "cs50", "instructure"] },
+        { "weight": 4, "subject_keywords": ["course", "lecture", "assignment", "your grade", "enrollment", "webinar", "masterclass", "certificate of completion", "cohort", "semester", "module"] }
       ]
     },
     {
       "name": "Shopping",
       "description": "Order confirmations, shipping & delivery updates.",
       "clean_action": "none",
-      "clean_older_than_days": 0,
       "rules": [
         { "weight": 5, "from_contains": ["shop.tiktok", "shopee", "lazada", "amazon", "@order", "orders@"] },
-        { "weight": 4, "subject_keywords": ["your order", "order confirmed", "order is confirmed", "order delivered", "order shipped", "tracking", "out for delivery", "shipment", "purchase"] },
-        { "weight": 3, "body_keywords": ["your order is confirmed", "order delivered", "tracking info", "is being prepared for shipment", "shopping basket"] }
-      ]
-    },
-    {
-      "name": "Social",
-      "description": "Social network and messaging notifications.",
-      "clean_action": "none",
-      "clean_older_than_days": 0,
-      "rules": [
-        { "weight": 4, "from_contains": ["messages-noreply@linkedin", "notification@service.tiktok", "facebookmail", "@instagram", "@x.com", "@twitter"] },
-        { "weight": 3, "from_domains": ["facebookmail.com", "instagram.com", "pinterest.com", "reddit.com"] },
-        { "weight": 3, "subject_keywords": ["sent you a message", "new follower", "tagged you", "wants to connect", "liked your", "commented on", "mentioned you", "reply on", "see your opportunities", "getting noticed"] }
-      ]
-    },
-    {
-      "name": "Newsletters",
-      "description": "Subscriptions, digests, articles you opted into.",
-      "clean_action": "none",
-      "clean_older_than_days": 0,
-      "rules": [
-        { "weight": 4, "from_contains": ["seekingalpha", "substack.com", "medium.com", "newsletters-noreply", "@mail.galaxy.ai", "pysource", "notifications@acquire.com", "digest@"] },
-        { "weight": 3, "subject_keywords": ["newsletter", "digest", "weekly", "this week", "roundup", "edition", "bulletin", "must reads", "latest article", "news quiz", "daily listing"] }
-      ]
-    },
-    {
-      "name": "Promotions",
-      "description": "Marketing, sales, discounts, offers.",
-      "clean_action": "none",
-      "clean_older_than_days": 0,
-      "rules": [
-        { "weight": 4, "subject_keywords": ["sale", "% off", "discount", "deal", "offer", "coupon", "promo", "save ", "save more", "limited time", "black friday", "cyber monday", "last chance", "new arrivals", "flexiloan", "shop "] },
-        { "weight": 3, "from_contains": ["marketing@", "deals@", "offers@", "hello@beauty", "myfave", "info.foodpanda", "mktg.", "braunbuffel", "info.emeritus"] },
-        { "weight": 1, "has_list_unsubscribe": true }
+        { "weight": 4, "subject_keywords": ["your order", "order confirmed", "order is confirmed", "order delivered", "order shipped", "tracking", "out for delivery", "shipment"] },
+        { "weight": 3, "body_keywords": ["your order is confirmed", "order delivered", "tracking info", "being prepared for shipment", "shopping basket"] }
       ]
     },
     {
       "name": "Travel",
       "description": "Bookings, itineraries, transport.",
       "clean_action": "none",
-      "clean_older_than_days": 0,
       "rules": [
         { "weight": 4, "subject_keywords": ["itinerary", "booking", "reservation", "boarding pass", "flight", "check-in", "hotel confirmation", "e-ticket"] },
         { "weight": 3, "from_contains": ["booking.com", "airbnb", "expedia", "agoda", "airlines", "trip.com", "getgo", "grab"] }
       ]
     },
     {
-      "name": "Work",
-      "description": "Dev tooling, documents, calendar, team.",
+      "name": "Entertainment",
+      "description": "Streaming & media subscriptions.",
       "clean_action": "none",
-      "clean_older_than_days": 0,
+      "rules": [
+        { "weight": 6, "from_contains": ["disney", "spotify", "netflix", "youtube", "@steampowered", "hbo", "primevideo", "twitch"] },
+        { "weight": 3, "subject_keywords": ["now streaming", "new episode", "your playlist", "watch now", "continue watching"] }
+      ]
+    },
+    {
+      "name": "Social",
+      "description": "Social network & messaging notifications.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 4, "from_contains": ["messages-noreply@linkedin", "notification@service.tiktok", "facebookmail", "@instagram", "@x.com", "@twitter"] },
+        { "weight": 3, "from_domains": ["facebookmail.com", "instagram.com", "pinterest.com", "reddit.com"] },
+        { "weight": 3, "subject_keywords": ["sent you a message", "new follower", "tagged you", "wants to connect", "liked your", "commented on", "mentioned you", "reply on", "getting noticed"] }
+      ]
+    },
+    {
+      "name": "Newsletters",
+      "description": "Subscriptions, digests, articles.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 4, "from_contains": ["seekingalpha", "substack.com", "medium.com", "newsletters-noreply", "@mail.galaxy.ai", "pysource", "notifications@acquire.com", "digest@"] },
+        { "weight": 3, "subject_keywords": ["newsletter", "digest", "weekly", "this week", "roundup", "edition", "bulletin", "latest article", "news quiz", "daily listing"] }
+      ]
+    },
+    {
+      "name": "Promotions",
+      "description": "Marketing, sales, discounts, offers.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 4, "subject_keywords": ["sale", "% off", "discount", "deal", "offer", "coupon", "promo", "save more", "limited time", "black friday", "cyber monday", "last chance", "new arrivals", "flexiloan"] },
+        { "weight": 3, "from_contains": ["marketing@", "deals@", "offers@", "hello@beauty", "myfave", "info.foodpanda", "mktg.", "braunbuffel"] },
+        { "weight": 1, "has_list_unsubscribe": true }
+      ]
+    },
+    {
+      "name": "Work",
+      "description": "Dev tooling, repos, docs, team & calendar.",
+      "clean_action": "none",
       "rules": [
         { "weight": 5, "from_domains": ["github.com", "gitlab.com", "atlassian.net", "slack.com", "notion.so", "asana.com"] },
-        { "weight": 3, "subject_keywords": ["pull request", "merge request", "pipeline", "deploy", "ticket", "meeting", "agenda"] }
+        { "weight": 3, "subject_keywords": ["pull request", "merge request", "pipeline", "deploy", "ticket", "meeting", "agenda", "calendar"] }
       ]
     },
     {
       "name": "Updates",
-      "description": "Account, service, system & government notifications.",
+      "description": "Generic automated service notifications (catch-all).",
       "clean_action": "none",
-      "clean_older_than_days": 0,
       "rules": [
-        { "weight": 3, "subject_keywords": ["notification", "alert", "verify", "confirm your", "security", "sign-in", "otp", "maintenance", "new listing", "invited you", "upcoming event", "domain name"] },
-        { "weight": 3, "from_contains": ["donotreply@sgnic", "notification@hdb", "calendar-notification@google", "@exabytes", "no-reply-", "@mail.anthropic.com"] },
-        { "weight": 1, "from_contains": ["notifications@", "alerts@", "updates@"] }
+        { "weight": 2, "subject_keywords": ["notification", "alert", "reminder", "update", "confirm", "maintenance", "new listing", "invited you", "upcoming event"] },
+        { "weight": 2, "from_contains": ["no-reply", "noreply", "donotreply", "notifications@", "alerts@", "updates@"] }
+      ]
+    },
+    {
+      "name": "Personal",
+      "description": "Genuine personal mail from individuals (last-resort).",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 2, "from_contains": ["@gmail.com", "@yahoo.com", "@hotmail.com", "@outlook.com", "@icloud.com", "@me.com"] },
+        { "weight": 1, "has_list_unsubscribe": false }
+      ]
+    },
+    {
+      "name": "Must read",
+      "description": "Priority overlay — urgent / action-required mail (added on top of the topic label).",
+      "clean_action": "none",
+      "overlay": true,
+      "rules": [
+        { "weight": 6, "subject_keywords": ["action required", "urgent", "important:", "response required", "response needed", "deadline", "final notice", "final reminder", "overdue", "past due", "account suspended", "expiring", "expires today", "expires tomorrow", "immediate attention", "time-sensitive", "last day"] },
+        { "weight": 3, "gmail_labels": ["IMPORTANT"] }
       ]
     }
   ]

@@ -24,12 +24,19 @@ class Classifier:
         if not categories:
             raise ValueError("Classifier needs at least one category")
         self.categories = categories
+        # Primary categories compete for the single topic label; overlays are additive.
+        self.primary = [c for c in categories if not c.overlay]
+        self.overlay = [c for c in categories if c.overlay]
         self.fallback = fallback
+
+    def overlay_labels(self, email: dict[str, Any]) -> list[str]:
+        """Names of overlay categories whose rules match this email (additive)."""
+        return [c.name for c in self.overlay if c.score(email) > 0]
 
     def classify_one(self, email: dict[str, Any]) -> Classification:
         best_name = self.fallback
         best_score = 0.0
-        for category in self.categories:
+        for category in self.primary:
             s = category.score(email)
             if s > best_score:
                 best_score = s
