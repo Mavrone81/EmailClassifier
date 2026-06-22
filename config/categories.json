@@ -101,7 +101,7 @@
       "description": "Order confirmations, shipping & delivery updates.",
       "clean_action": "none",
       "rules": [
-        { "weight": 5, "from_contains": ["shop.tiktok", "shopee", "lazada", "amazon", "@order", "orders@"] },
+        { "weight": 5, "from_contains": ["shopee", "lazada", "amazon", "@order", "orders@"] },
         { "weight": 4, "subject_keywords": ["your order", "order confirmed", "order is confirmed", "order delivered", "order shipped", "tracking", "out for delivery", "shipment"] },
         { "weight": 3, "body_keywords": ["your order is confirmed", "order delivered", "tracking info", "being prepared for shipment", "shopping basket"] }
       ]
@@ -138,7 +138,8 @@
       "description": "Social network & messaging notifications.",
       "clean_action": "none",
       "rules": [
-        { "weight": 4, "from_contains": ["messages-noreply@linkedin", "notification@service.tiktok", "facebookmail", "@instagram", "@x.com", "@twitter"] },
+        { "weight": 7, "from_contains": ["tiktok"] },
+        { "weight": 4, "from_contains": ["messages-noreply@linkedin", "facebookmail", "@instagram", "@x.com", "@twitter"] },
         { "weight": 3, "from_domains": ["facebookmail.com", "instagram.com", "pinterest.com", "reddit.com"] },
         { "weight": 3, "subject_keywords": ["sent you a message", "new follower", "tagged you", "wants to connect", "liked your", "commented on", "mentioned you", "reply on", "getting noticed"] }
       ]
