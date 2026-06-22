@@ -16,8 +16,8 @@
       "description": "Sign-in alerts, OTP, password resets, 2FA, account verification.",
       "clean_action": "none",
       "rules": [
-        { "weight": 6, "subject_keywords": ["security alert", "new sign-in", "new login", "sign-in attempt", "login attempt", "unusual activity", "suspicious", "verify your", "verification code", "one-time password", "one time password", "otp", "2fa", "two-factor", "reset your password", "password was", "password changed", "confirm your email", "was this you"] },
-        { "weight": 3, "body_keywords": ["verification code", "one-time", "we noticed a new sign-in", "verify it was you"] }
+        { "weight": 6, "subject_keywords": ["security alert", "new sign-in", "new login", "sign-in attempt", "login attempt", "unusual activity", "suspicious", "verify your", "verification code", "one-time password", "one time password", "single-use code", "single use code", "security code", "otp", "2fa", "two-factor", "reset your password", "password was", "password changed", "confirm your email", "was this you"] },
+        { "weight": 3, "body_keywords": ["verification code", "single-use code", "your single-use code is", "one-time", "we noticed a new sign-in", "verify it was you"] }
       ]
     },
     {
@@ -36,7 +36,8 @@
       "clean_action": "none",
       "rules": [
         { "weight": 6, "from_contains": ["sgnic", "donotreply@sgnic", "namecheap", "godaddy", "cloudflare", "@registrar", "domains@", "noc@", "@exabytes"] },
-        { "weight": 5, "subject_keywords": ["domain name", "domain expiry", "domain renewal", "renew your domain", "nameserver", "dns record", "dns zone", ".sg domain", "ssl certificate", "whois", "registrar"] }
+        { "weight": 5, "subject_keywords": ["domain name", "domain expiry", "domain renewal", "renew your domain", "nameserver", "dns record", "dns zone", ".sg domain", "ssl certificate", "whois", "registrar"] },
+        { "weight": 5, "body_keywords": ["domain name(s)", ".sg” domain", "administrative contact", "designated as the", "registrant", "registration information"] }
       ]
     },
     {
@@ -45,8 +46,8 @@
       "clean_action": "none",
       "rules": [
         { "weight": 5, "from_contains": ["ibanking.alert", "digibank", "@dbs.com", "paypal", "stripe", "@ocbc", "@posb", "@uob", "@gxs", "wise.com", "revolut"] },
-        { "weight": 4, "subject_keywords": ["invoice", "receipt", "payment received", "statement", "transaction", "balance", "refund", "paynow", "nets", "digibank", "payment failed", "card ending"] },
-        { "weight": 3, "body_keywords": ["paynow", "nets scan", "transaction was completed", "transaction ref", "you've received a transfer", "we weren't able to charge"] }
+        { "weight": 4, "subject_keywords": ["invoice", "receipt", "payment received", "statement", "transaction", "balance", "refund", "paynow", "nets", "digibank", "payment failed", "card ending", "your payment", "payment declined", "payment was declined", "issue with your payment", "subscription will be cancelled", "update your payment", "has been charged", "your subscription"] },
+        { "weight": 3, "body_keywords": ["paynow", "nets scan", "transaction was completed", "transaction ref", "you've received a transfer", "we weren't able to charge", "we've charged", "your payment for subscription", "update your payment method", "payment was declined", "your purchase of"] }
       ]
     },
     {
@@ -115,6 +116,15 @@
       ]
     },
     {
+      "name": "Calendar",
+      "description": "Event invites, RSVPs & calendar reminders.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 5, "subject_keywords": ["invitation:", "invited you", "you have been invited", "upcoming event", "event named", "rsvp", "accepted:", "declined:", "updated invitation"] },
+        { "weight": 4, "body_keywords": ["you have an upcoming event", "you have been invited by", "add to calendar", "singapore standard time)"] }
+      ]
+    },
+    {
       "name": "Entertainment",
       "description": "Streaming & media subscriptions.",
       "clean_action": "none",
@@ -143,6 +153,16 @@
       ]
     },
     {
+      "name": "Rewards",
+      "description": "Loyalty programmes, points, cashback & vouchers.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 5, "from_contains": ["capitastar", "capitaland", "@rewards", "loyalty@", "starbucks", "@capita"] },
+        { "weight": 4, "subject_keywords": ["star$", "ecapitavoucher", "cashback", "reward points", "be rewarded", "redeem", "loyalty", "earn points", "1-for-1", "evoucher", "your points"] },
+        { "weight": 3, "body_keywords": ["be rewarded as you shop", "ways to earn star$", "ecapitavoucher", "redeem carpark"] }
+      ]
+    },
+    {
       "name": "Promotions",
       "description": "Marketing, sales, discounts, offers.",
       "clean_action": "none",
@@ -159,6 +179,15 @@
       "rules": [
         { "weight": 5, "from_domains": ["github.com", "gitlab.com", "atlassian.net", "slack.com", "notion.so", "asana.com"] },
         { "weight": 3, "subject_keywords": ["pull request", "merge request", "pipeline", "deploy", "ticket", "meeting", "agenda", "calendar"] }
+      ]
+    },
+    {
+      "name": "Account",
+      "description": "Account settings, storage, profile & service admin.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 4, "subject_keywords": ["your account", "account settings", "storage", "service interruption", "finish your setup", "finish setting up", "update your settings", "we're updating", "manage your", "terms of service", "privacy policy", "6 new updates"] },
+        { "weight": 3, "body_keywords": ["avoid service interruptions", "updating our settings", "finish your setup", "your storage", "give you even more control"] }
       ]
     },
     {

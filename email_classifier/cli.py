@@ -150,6 +150,47 @@ def cmd_sort(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_maintain(args: argparse.Namespace) -> int:
+    """Label maintenance: mark-read and/or trash messages matching a Gmail query.
+
+    Examples:
+      maintain --query "label:Shopping is:unread" --mark-read --apply
+      maintain --query "label:Finance older_than:3m" --trash --apply
+    Dry-run by default. `trash` moves to Gmail Trash (recoverable ~30 days).
+    """
+    from .gmail_client import GmailClient
+
+    if not (args.mark_read or args.trash):
+        print("  Nothing to do — pass --mark-read and/or --trash.")
+        return 2
+    client = GmailClient(args.credentials, args.token)
+    ids = client.list_message_ids(query=args.query, limit=args.limit)
+    dry_run = not args.apply
+    print(f"\n  Query: {args.query!r}  →  {len(ids)} message(s)")
+    actions = []
+    if args.mark_read:
+        actions.append("mark-read")
+    if args.trash:
+        actions.append("trash")
+    print(f"  Actions: {', '.join(actions)}   [{'DRY-RUN' if dry_run else 'APPLY'}]\n")
+
+    done = {"mark_read": 0, "trash": 0}
+    for mid in ids:
+        if args.mark_read and not args.trash:   # marking read only
+            if not dry_run:
+                client.mark_read(mid)
+            done["mark_read"] += 1
+        if args.trash:                          # trash supersedes (also clears unread)
+            if not dry_run:
+                client.trash(mid)
+            done["trash"] += 1
+    if dry_run:
+        print(f"  Would: {done}\n  Re-run with --apply to perform.\n")
+    else:
+        print(f"  Done: {done}\n")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="email_classifier", description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -184,6 +225,13 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--label-prefix", default="", dest="label_prefix",
                    help="optional prefix for created labels, e.g. 'Sorted/'")
     s.set_defaults(func=cmd_sort)
+
+    m = sub.add_parser("maintain", help="mark-read / trash messages matching a Gmail query")
+    add_live(m)
+    m.add_argument("--mark-read", action="store_true", dest="mark_read", help="mark matches as read")
+    m.add_argument("--trash", action="store_true", help="move matches to Trash (recoverable ~30d)")
+    m.add_argument("--apply", action="store_true", help="actually perform (default: dry-run)")
+    m.set_defaults(func=cmd_maintain)
     return p
 
 
