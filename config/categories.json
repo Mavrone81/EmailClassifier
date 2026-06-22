@@ -7,7 +7,7 @@
       "clean_older_than_days": 0,
       "rules": [
         { "weight": 6, "gmail_labels": ["SPAM"] },
-        { "weight": 6, "subject_keywords": ["you won", "you have won", "winner", "congratulations you", "claim your prize", "claim your reward", "you have been selected", "free gift card", "viagra", "cialis", "crypto giveaway", "double your bitcoin", "wire transfer", "unclaimed funds", "nigerian prince", "verify your account immediately", "tax refund pending", "you are a lucky"] },
+        { "weight": 6, "subject_keywords": ["you won", "you have won", "winner", "congratulations you", "claim your prize", "claim your reward", "you have been selected", "free gift card", "viagra", "cialis", "crypto giveaway", "double your bitcoin", "wire transfer", "unclaimed funds", "nigerian prince", "verify your account immediately", "tax refund pending", "you are a lucky", "win tickets", "win a ", "you could win", "enter to win", "sweepstakes", "spin to win", "lucky draw", "win free", "win the", "win two", "free entry"] },
         { "weight": 4, "from_contains": ["lucky-draw", "prize-", "winner@", "rewards-", "giveaway", ".top", ".xyz"] }
       ]
     },
@@ -35,9 +35,8 @@
       "description": "Domain & DNS — registrars, renewals, nameserver/zone notices.",
       "clean_action": "none",
       "rules": [
-        { "weight": 6, "from_contains": ["sgnic", "donotreply@sgnic", "namecheap", "godaddy", "cloudflare", "@registrar", "domains@", "noc@", "@exabytes"] },
-        { "weight": 5, "subject_keywords": ["domain name", "domain expiry", "domain renewal", "renew your domain", "nameserver", "dns record", "dns zone", ".sg domain", "ssl certificate", "whois", "registrar"] },
-        { "weight": 5, "body_keywords": ["domain name(s)", ".sg” domain", "administrative contact", "designated as the", "registrant", "registration information"] }
+        { "weight": 6, "from_contains": ["namecheap", "godaddy", "cloudflare", "@registrar", "domains@", "noc@", "@exabytes"] },
+        { "weight": 5, "subject_keywords": ["domain name", "domain expiry", "domain renewal", "renew your domain", "nameserver", "dns record", "dns zone", "ssl certificate", "whois", "registrar"] }
       ]
     },
     {
@@ -185,10 +184,12 @@
     },
     {
       "name": "Work",
-      "description": "Dev tooling, repos, docs, team & calendar.",
+      "description": "Dev tooling, repos, docs, team, domains & calendar.",
       "clean_action": "none",
       "rules": [
+        { "weight": 7, "from_contains": ["sgnic", "donotreply@sgnic", "github", "gitlab"] },
         { "weight": 5, "from_domains": ["github.com", "gitlab.com", "atlassian.net", "slack.com", "notion.so", "asana.com"] },
+        { "weight": 5, "body_keywords": ["administrative contact", "designated as the", "registrant", "domain name(s)", "registration information", ".sg” domain"] },
         { "weight": 3, "subject_keywords": ["pull request", "merge request", "pipeline", "deploy", "ticket", "meeting", "agenda", "calendar"] }
       ]
     },
