@@ -145,6 +145,16 @@
       ]
     },
     {
+      "name": "AI",
+      "description": "AI products, tools, models & AI-focused updates.",
+      "clean_action": "none",
+      "rules": [
+        { "weight": 6, "from_contains": ["openai", "anthropic", "@mail.galaxy.ai", "huggingface", "cursor.", "replit", "midjourney", "perplexity", "runwayml", "stability.ai", "@n8n", "elevenlabs", "@mail.galaxy"] },
+        { "weight": 4, "subject_keywords": ["chatgpt", "gpt-4", "gpt-5", "gpt5", "openai", "anthropic", "claude", "gemini", "copilot", "llm", "generative ai", "ai agent", "ai agents", "ai model", "ai tool", "ai-powered", "ai powered", "machine learning", "neural network", "stable diffusion", "midjourney", "n8n"] },
+        { "weight": 3, "body_keywords": ["large language model", "generative ai", "gpt-5", "ai agents", "prompt engineering"] }
+      ]
+    },
+    {
       "name": "Newsletters",
       "description": "Subscriptions, digests, articles.",
       "clean_action": "none",
